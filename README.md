@@ -6,4 +6,4 @@
 5. Debug any issues.
 6. Fix any issues.
 7. Re-apply and verify the pod is Running.
-8. Commit your fix and push to your fork (or just show the commit).
+8. Commit your fix and push to your fork or branch.
