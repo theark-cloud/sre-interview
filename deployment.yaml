@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - name: web
+        image: busybox:1.35  # Public, tiny, reliable image
+        command: ["/bin/sh"]
+        args: ["-c", "echo 'Starting up...'; false"]  # 'false' exits with code 1 → crash
