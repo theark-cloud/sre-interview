@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: web
-        image: busybox:1.35  # Public, tiny, reliable image
+        image: busybox:1.35
         command: ["/bin/sh"]
-        args: ["-c", "echo 'Starting up...'; false"]  # 'false' exits with code 1 → crash
+        args: ["-c", "echo 'Starting up...'; sleep ifninity"]
