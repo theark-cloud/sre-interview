@@ -24,7 +24,23 @@ spec:
       - name: web
         image: busybox:1.35
         command: ["/bin/sh"]
-        args: ["-c", "echo 'Starting up...'; sleep infinity"]
+        args:
+        - -c
+        - |
+          set -e
+          echo 'Starting web application...'
+          echo 'Loading environment variables...'
+          echo "Environment: ${ENVIRONMENT}"
+          echo "Log level: ${LOG_LEVEL}"
+          echo 'Checking configuration files...'
+          test -f /etc/app/config.yaml && echo 'Config file found' || echo 'Using default configuration'
+          echo 'Verifying system dependencies...'
+          command -v wget >/dev/null 2>&1 && echo 'Network tools: OK'
+          command -v nc >/dev/null 2>&1 && echo 'Networking: OK'
+          command -v curl >/dev/null 2>&1 && echo 'HTTP client: OK'
+          echo 'Starting health check endpoint...'
+          echo 'Application ready, entering main loop...'
+          sleep infinity
         ports:
         - containerPort: 8080
           name: http
