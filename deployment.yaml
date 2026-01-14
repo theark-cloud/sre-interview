@@ -35,9 +35,11 @@ spec:
           echo 'Checking configuration files...'
           test -f /etc/app/config.yaml && echo 'Config file found' || echo 'Using default configuration'
           echo 'Verifying system dependencies...'
-          command -v wget >/dev/null 2>&1 && echo 'Network tools: OK'
-          command -v nc >/dev/null 2>&1 && echo 'Networking: OK'
-          command -v curl >/dev/null 2>&1 && echo 'HTTP client: OK'
+          command -v wget >/dev/null && echo 'Network tools: OK'
+          command -v nc >/dev/null && echo 'Networking: OK'
+          echo 'Checking HTTP client availability...'
+          curl --version >/dev/null
+          echo 'HTTP client: OK'
           echo 'Starting health check endpoint...'
           echo 'Application ready, entering main loop...'
           sleep infinity
@@ -57,11 +59,19 @@ spec:
           limits:
             memory: "64Mi"
             cpu: "200m"
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 1
+          periodSeconds: 2
+          timeoutSeconds: 1
+          failureThreshold: 1
         livenessProbe:
           httpGet:
             path: /healthz
             port: 8080
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 3
+          initialDelaySeconds: 2
+          periodSeconds: 2
+          timeoutSeconds: 1
+          failureThreshold: 1
